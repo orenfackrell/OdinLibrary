@@ -12,11 +12,11 @@
     <h2>Add a new book to your Library</h2>
     <div class="form-field">
         <label for="book-title">Book Title</label>
-        <input type="text" id="book-title" name="book-title">
+        <input type="text" id="book-title" name="book-title" required>
     </div>
     <div class="form-field">
         <label for="book-author">Book Author</label>
-        <input type="text" id="book-author" name="book-author">
+        <input type="text" id="book-author" name="book-author" required>
     </div>
     <div class="form-field">
         <label for="pages">#Pages (optional)</label>
@@ -26,7 +26,7 @@
         <label for="read-validation">Have you read this book?</label>
         <input type="checkbox" id="read-validation" name="read-validation"> 
     </div> 
-    <button class="confirm" type="submit">
+    <button class="confirm" type="button" onclick="addBookToLibrary()">
         Add Book
     </button>
 </form>
@@ -45,6 +45,6 @@
     <div class="shelf-base"></div>
 </div>
 
-
+<script src="scripts.js"></script>
 </body>
 </html>
