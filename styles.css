@@ -1,0 +1,56 @@
+:root {
+    --clr-onyx: #2E3532;
+    --clr-claret: #8B2635;
+    --clr-alabaster: #E0E2DB;
+    --clr-timberwolf: #D2D4C8;
+    --clr-tea-green: #D3EFBD;
+}
+
+* {
+    font-family: 'Roboto Slab', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 300px repeat(3, 1fr);
+    grid-template-rows: 380px 1fr;
+}
+
+.form-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    margin: 1rem;
+    border-radius: 0.8rem;
+    background-color: var(--clr-timberwolf);
+}
+
+.form-field{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 0.5rem;
+}
+
+input {
+    padding: 0.25rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    letter-spacing: -0.16px;
+}
+
+h2 {
+    margin: 0.2rem;
+}
