@@ -35,6 +35,7 @@ Form card styling & layout
     flex-direction: column;
     align-items: center;
     text-align: center;
+    justify-content: space-around;
     gap: 0.25rem;
     padding: 0.5rem;
     margin: 1rem;
