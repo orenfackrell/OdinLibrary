@@ -1,16 +1,18 @@
-  let myLibrary = [];
+/*
+Regarding object creation and 'myLibrary' array
+*/
 
-  function book(title, author, pages, read) {
+let myLibrary = [];
+
+function book(title, author, pages, read) {
     pages = pages || undefined
     this.title = title
     this.author = author
     this.pages = pages
     this.read = read
-  };
+};
 
-
-  function addBookToLibrary() {
-
+function addBookToLibrary() {
     let title = document.getElementById('book-title').value
     let author = document.getElementById('book-author').value
     let pages = document.getElementById('pages').value;
@@ -21,19 +23,23 @@
     } else {
         read = "you have read this book";
     }
-
+    
     const commitBook = new book(title, author, pages, read);
     myLibrary.push(commitBook);
     console.log(myLibrary);
-  };
+    saveLibraryToLocalStorage();
+};
+        
 
-// Below is code to calculate how many spines can fit onto each shelf and handles the logic for selecting shelves that have space to accept more spines
+/*
+Regarding appending spines to the page
+*/
  
 const spineWidth = 55 + 3.2;  // this is the border-box size + the 'gap' value on the shelf
 
 function getMaxSpinesForShelf(shelf) {
     return (Math.floor(shelf.offsetWidth / spineWidth));
-}
+};
 
 function getAvailableShelf() {
     const shelves = document.querySelectorAll('.shelf');
@@ -41,14 +47,14 @@ function getAvailableShelf() {
         const currentSpines = shelf.querySelectorAll('.spine').length;
         const maxSpines = getMaxSpinesForShelf(shelf);
 
-        console.log(`Shelf: ${shelf}, Current spines: ${currentSpines}, Max spines: ${maxSpines}`); 
+        console.log(`Shelf: ${shelf}, Current spines: ${currentSpines}, Max spines: ${maxSpines}`);
 
         if (currentSpines < maxSpines) {
             return shelf;
         }
     }
     alert("There no more space on the shelves! Your book has been added to storage.")
-}
+};
 
 function addSpineToShelf() {
     let title = document.getElementById('book-title').value;
@@ -80,3 +86,70 @@ function addSpineToShelf() {
     const targetShelf = getAvailableShelf();
     targetShelf.appendChild(spine);
 };
+
+// On the page being reloaded this will re-append books from the library to the page
+function addSpineForBook(book) {
+    const title = book.title;
+    const spine = document.createElement('div');
+    spine.className = 'spine';
+    const titleElement = document.createElement('p');
+
+    if (book.read === "you have not read this book") {
+        titleElement.style.color = "var(--clr-white)";
+    } else {
+        titleElement.style.color = "var(--clr-black)";
+    }
+    titleElement.innerText = title;
+    spine.appendChild(titleElement);
+
+    if (book.read === "you have not read this book") {
+        spine.style.backgroundColor = "var(--clr-not-read)";
+    } else {
+        spine.style.backgroundColor = "var(--clr-read)";
+    }
+
+    const targetShelf = getAvailableShelf();
+    targetShelf.appendChild(spine);
+}
+
+/*
+Regarding local storage
+*/
+
+function saveLibraryToLocalStorage() {
+    localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
+};
+
+function loadLibraryFromLocalStorage() {
+    const savedLibrary = localStorage.getItem('myLibrary');
+    if (savedLibrary) {
+        try {
+            myLibrary = JSON.parse(savedLibrary);
+
+            myLibrary.forEach(book => {
+                addSpineForBook(book);  // Assuming you have a function to add a spine for a book
+            });
+        } catch (error) {
+            alert("There was an error loading your saved library. Data might be corrupted or in an unexpected format.");
+        }
+}};
+
+function clearMemory() {
+    const userConfirmed = confirm("Are you sure you want to reset all data? This action cannot be undone.");
+
+    if (userConfirmed) {
+        localStorage.removeItem('myLibrary');  
+        myLibrary = [];  
+
+        const spines = document.querySelectorAll('.spine');
+        spines.forEach(spine => {
+            spine.parentElement.removeChild(spine);
+        });
+        
+        alert("Data has been reset!");  
+    } else {
+        alert("Data reset has been canceled.");
+    }
+};
+
+document.addEventListener('DOMContentLoaded', loadLibraryFromLocalStorage);
