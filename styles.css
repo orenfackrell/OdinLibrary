@@ -30,7 +30,7 @@ body {
 Form card styling & layout
 */
 
-.form-card {
+.card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,10 +41,18 @@ Form card styling & layout
     border-radius: 0.8rem;
     background-color: var(--clr-timberwolf);
     border: 2px solid var(--clr-mahogany);
+    position: absolute;
+    height: 340px;
 }
 
 h3 {
     margin: 0.1rem;
+}
+
+.card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .form-field{
@@ -53,6 +61,12 @@ h3 {
     align-items: center;
     justify-content: space-around;
     gap: 0.5rem;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
 }
 
 input {
@@ -66,10 +80,65 @@ input {
     border: 1px solid var(--clr-onyx);
 }
 
-button {
+.confirm-button {
     padding: 0.5rem 1rem;
-    background-color: white;
+    background-color: var(--clr-white);
     border-radius: 15rem;   
+}
+
+.swipe-button {
+    padding: 2rem 0rem;
+    background-color: var(--clr-white);
+    border: 1px solid var(--clr-onyx);
+}
+
+.swipe-right {
+    border-radius: 0 10rem 10rem 0;
+}
+
+.swipe-left {
+    border-radius: 10rem 0 0 10rem ;
+}
+
+/*
+Card formatting for animations
+*/
+
+.card-groups {
+    display: grid;
+    place-items: center;
+}
+
+.card {
+    position: absolute;
+    transition: transform 400ms ease;
+}
+
+.card[data-status="unknown"] {
+    transform: scale(0);
+    transition: none;
+}
+
+.card[data-status="active"] {
+    transition-delay: 300ms;
+}
+
+.card[data-status="after"] {
+    transform: translateX(50%) scale(0);
+}
+
+.card[data-status="before"] {
+    transform: translateX(-50%) scale(0);
+}
+
+.card[data-status="becoming-active-from-after"] {
+    transform: translateX(50%) scale(0);
+    transition: none;
+}
+
+.card[data-status="becoming-active-from-before"] {
+    transform: translateX(-50%) scale(0);
+    transition: none;
 }
 
 /*

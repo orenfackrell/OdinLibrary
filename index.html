@@ -6,35 +6,90 @@
     <title>Odin Library</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto Slab">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
-<form class="form-card" action="#" method="post">   
-    <h3>Add a new book to your Library</h3>
-    <div class="form-field">
-        <label for="book-title">Book Title</label>
-        <input type="text" id="book-title" name="book-title" required>
-    </div>
-    <div class="form-field">
-        <label for="book-author">Book Author</label>
-        <input type="text" id="book-author" name="book-author" required>
-    </div>
-    <div class="form-field">
-        <label for="pages">#Pages (optional)</label>
-        <input type="number" id="pages" name="pages">
-    </div>
-    <div class="form-field">
-        <label for="read-validation">Have you read this book?</label>
-        <input type="checkbox" id="read-validation" name="read-validation"> 
-    </div> 
-    <div class="button-wrapper">
-        <button class="reset-data" type="button" onclick="clearMemory()">
-            Reset Data
+
+
+<div class="card-groups">
+
+    <div class="card" data-index="0" data-status="active">
+        <form class="form-card" action="#" method="post">
+            <h3>Add a new book to your Library</h3>
+    
+        <div class="card-body">
+            <button class="swipe-button swipe-left" type="button" onclick="handleSwipeLeft()">
+                <i class="ph-bold ph-caret-left"></i>
             </button>
-        <button class="confirm" type="button" onclick="addBookToLibrary();addSpineToShelf();"> <!-- replace functions with -> onclick="validateAndClearForm()""-->
-            Add Book
-        </button>
+            <div class="inputs">
+                <div class="form-field">
+                    <label for="book-title">Book Title</label>
+                    <input type="text" id="book-title" name="book-title" required>
+                </div>
+                <div class="form-field">
+                    <label for="book-author">Book Author</label>
+                    <input type="text" id="book-author" name="book-author" required>
+                </div>
+                <div class="form-field">
+                    <label for="pages">#Pages (optional)</label>
+                    <input type="number" id="pages" name="pages">
+                </div>
+                <div class="form-field">
+                    <label for="read-validation">Have you read this book?</label>
+                    <input type="checkbox" id="read-validation" name="read-validation">
+                </div>
+            </div>
+            <button class="swipe-button swipe-right" type="button" onclick="handleSwipeRight()">
+                <i class="ph-bold ph-caret-right"></i>
+            </button>
+        </div>
+        <div class="button-wrapper">
+            <button class="confirm-button" type="button" onclick="addBookToLibrary();addSpineToShelf();"> <!-- replace functions with -> onclick="validateAndClearForm()""-->
+                Add Book
+            </button>
+        </div>
+        </form>
     </div>
-</form>
+
+    <div class="card" data-index="1" data-status="unknown">
+        <form class="form-card">
+            <h3>Adjust your library as you please</h3>
+    
+        <div class="card-body">
+            <button class="swipe-button swipe-left" type="button" onclick="handleSwipeLeft()">
+                <i class="ph-bold ph-caret-left"></i>
+            </button>
+            <div class="inputs">
+                <div class="form-field">
+                    <label for="sorting">Sort by:</label>
+                    <select name="sorting" id="sorting">
+                        <option value="titleA-Z">Title A-Z</option>
+                        <option value="titleZ-A">Title Z-A</option>
+                        <option value="authorA-Z">Author A-Z</option>
+                        <option value="authorZ-A">Author Z-A</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="reset">Delete saved data?</label>
+                    <button class="confirm-button" id="reset" type="button" onclick="clearMemory()">
+                        Reset Data
+                    </button>
+                </div>
+
+            </div>
+            <button class="swipe-button swipe-right" type="button" onclick="handleSwipeRight()">
+                <i class="ph-bold ph-caret-right"></i>
+            </button>
+        </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
 
 <div class="top-book-shelf">
     <div class="shelf-top"></div>
