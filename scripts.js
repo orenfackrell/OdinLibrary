@@ -153,3 +153,30 @@ function clearMemory() {
 };
 
 document.addEventListener('DOMContentLoaded', loadLibraryFromLocalStorage);
+
+/* 
+Regarding form validation 
+*/
+
+function validateAndClearForm() {
+    const form = document.querySelector('.form-card');
+    const requiredInputs = form.querySelectorAll('input[required]');
+
+    let allValid = true;
+
+    requiredInputs.forEach(input => {
+        if (!input.checkValidity()) {
+            input.classList.add('invalid-input');
+            allValid = false;
+        } else {
+            input.classList.remove('invalid-input');
+        }
+    });
+
+    if (allValid) {
+        addBookToLibrary();
+        addSpineToShelf();
+        saveLibraryToLocalStorage();
+        form.reset();
+    }
+};
