@@ -1,6 +1,4 @@
-/*
-Regarding object creation and 'myLibrary' array
-*/
+/* -- Regarding object creation and 'myLibrary' array -- */
 
 let myLibrary = [];
 
@@ -26,14 +24,11 @@ function addBookToLibrary() {
     
     const commitBook = new book(title, author, pages, read);
     myLibrary.push(commitBook);
-    console.log(myLibrary);
     saveLibraryToLocalStorage();
 };
         
 
-/*
-Regarding appending spines to the page
-*/
+/* -- Regarding appending spines to the page -- */
  
 const spineWidth = 55 + 3.2;  // this is the border-box size + the 'gap' value on the shelf
 
@@ -46,8 +41,6 @@ function getAvailableShelf() {
     for (let shelf of shelves) {
         const currentSpines = shelf.querySelectorAll('.spine').length;
         const maxSpines = getMaxSpinesForShelf(shelf);
-
-        console.log(`Shelf: ${shelf}, Current spines: ${currentSpines}, Max spines: ${maxSpines}`);
 
         if (currentSpines < maxSpines) {
             return shelf;
@@ -112,9 +105,7 @@ function addSpineForBook(book) {
     targetShelf.appendChild(spine);
 }
 
-/*
-Regarding local storage
-*/
+/* -- Regarding local storage -- */
 
 function saveLibraryToLocalStorage() {
     localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
@@ -154,9 +145,7 @@ function clearMemory() {
 
 document.addEventListener('DOMContentLoaded', loadLibraryFromLocalStorage);
 
-/* 
-Regarding form validation 
-*/
+/* -- Regarding form validation -- */
 
 function validateAndClearForm() {
     const form = document.querySelector('.form-card');
@@ -181,9 +170,7 @@ function validateAndClearForm() {
     }
 };
 
-/*
-Regarding card swiping animations 
-*/
+/* -- Regarding card swiping animations -- */
 
 let activeIndex = 0;
 
@@ -219,4 +206,4 @@ const handleSwipeLeft = () => {
     nextGroup.dataset.status = "active";
     activeIndex = nextIndex;
   });
-}
+};
