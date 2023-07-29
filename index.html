@@ -9,7 +9,7 @@
 </head>
 <body>
 <form class="form-card" action="#" method="post">   
-    <h2>Add a new book to your Library</h2>
+    <h3>Add a new book to your Library</h3>
     <div class="form-field">
         <label for="book-title">Book Title</label>
         <input type="text" id="book-title" name="book-title" required>
@@ -26,10 +26,13 @@
         <label for="read-validation">Have you read this book?</label>
         <input type="checkbox" id="read-validation" name="read-validation"> 
     </div> 
-    <button class="confirm" type="button" onclick="addBookToLibrary()">
-        Add Book
-    </button>
+    <div class="button-wrapper">
+        <button class="confirm" type="button" onclick="addBookToLibrary();addSpineToShelf();">
+            Add Book
+        </button>
+    </div>
 </form>
+
 <div class="top-book-shelf">
     <div class="shelf-top"></div>
     <div class="shelf"></div>

@@ -9,6 +9,7 @@ Global variables & page layout
     --clr-timberwolf: #D2D4C8;
     --clr-read: #D3EFBD;
     --clr-black: #050609;
+    --clr-white: #fff;
     --clr-mahogany: #482029;
 }
 
@@ -42,8 +43,8 @@ Form card styling & layout
     border: 2px solid var(--clr-mahogany);
 }
 
-h2 {
-    margin: 0.2rem;
+h3 {
+    margin: 0.1rem;
 }
 
 .form-field{
@@ -63,6 +64,12 @@ input {
     line-height: 150%;
     letter-spacing: -0.16px;
     border: 1px solid var(--clr-onyx);
+}
+
+button {
+    padding: 0.5rem 1rem;
+    background-color: white;
+    border-radius: 15rem;   
 }
 
 /*
@@ -89,12 +96,12 @@ input {
 
 .shelf {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(35px, 55px));
+    grid-template-columns: repeat(auto-fill, 55px);
     margin: 0rem 0.5rem;
     background-color: var(--clr-timberwolf);
     border: 2px solid var(--clr-mahogany);
     gap: 0.2rem;
-    padding: 0 0.2rem;
+    padding: 0 2px;
 }
 
 .spine {
@@ -112,4 +119,9 @@ input {
     overflow: hidden;         
     text-overflow: ellipsis;  
     max-height: 175px;          
+}
+
+.spine, 
+.shelf {
+    box-sizing: border-box;
 }
