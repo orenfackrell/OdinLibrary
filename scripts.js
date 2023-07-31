@@ -2,27 +2,24 @@
 
 let myLibrary = [];
 
-function book(title, author, pages, read) {
-    pages = pages || undefined
+function book(title, author, read, rating, extraNotes) {
+    rating = rating || undefined
     this.title = title
     this.author = author
-    this.pages = pages
     this.read = read
+    this.rating = rating
+    this.extraNotes = extraNotes
 };
 
 function addBookToLibrary() {
     let title = document.getElementById('book-title').value
     let author = document.getElementById('book-author').value
-    let pages = document.getElementById('pages').value;
-    let read;
-    const readValidation = document.getElementById('read-validation')
-    if (readValidation.checked == false){
-        read = "you have not read this book";
-    } else {
-        read = "you have read this book";
-    }
+    let read = document.getElementById('read-validation').checked
+    let rating = document.getElementById('rating-input').value;
     
-    const commitBook = new book(title, author, pages, read);
+    
+    const commitBook = new book(title, author, read, rating);
+    console.log(myLibrary);
     myLibrary.push(commitBook);
     saveLibraryToLocalStorage();
 };
@@ -50,56 +47,246 @@ function getAvailableShelf() {
 };
 
 function addSpineToShelf() {
+    // Get the values from the input fields
     let title = document.getElementById('book-title').value;
-    let read;
-    const readValidation = document.getElementById('read-validation');
-    if (readValidation.checked == false) {
-        read = "you have not read this book";
-    } else {
-        read = "you have read this book";
-    }
-    let spine = document.createElement('div');
+    let author = document.getElementById('book-author').value;
+    let read = document.getElementById('read-validation').checked;
+    let rating = document.getElementById('rating-input').value;
+
+    // Create spine
+    let spine = document.createElement('article');
     spine.className = 'spine';
 
-    let spineText = document.createElement('p');
-    if (read === "you have not read this book") {
-        spineText.style.color = "var(--clr-white)";
-    } else {
-        spineText.style.color = "var(--clr-black)";
+    // Make visible spine header
+    let spineTitle = document.createElement('header');
+    spineTitle.className = 'spine-title';
+    let bookmarkIcon = document.createElement('i');
+    bookmarkIcon.className = 'ph ph-bookmark';
+    let titleText = document.createElement('p');
+    titleText.textContent = title;
+    if (read) {
+        spineTitle.appendChild(bookmarkIcon);
     }
-    spineText.textContent = `${title}`;
-    spine.appendChild(spineText);
+    spineTitle.appendChild(titleText);
+    spine.appendChild(spineTitle);
 
-    if (read === "you have not read this book") {
-        spine.style.backgroundColor = "var(--clr-not-read)";
-    } else {
-        spine.style.backgroundColor = "var(--clr-read)";
+    // Make hidden spine body
+    let spineBody = document.createElement('div');
+    spineBody.className = 'spine-body';
+
+    // Create author gird 
+    let authorText = document.createElement('div');
+    authorText.textContent = "Author:";
+    let authorName = document.createElement('p');
+    authorName.textContent = `${author}`;
+    authorText.appendChild(authorName);
+    spineBody.appendChild(authorText);
+
+    // Create update buttons gird 
+    let updateButtons = document.createElement('div');
+    updateButtons.className = 'update-container';
+
+    let readWrapper = document.createElement('div');
+    readWrapper.className = 'button-wrapper';
+    let readLabel = document.createElement('label');
+    readLabel.setAttribute('for', 'read');
+    readLabel.textContent = "Read?";
+    let readButton = document.createElement('button');
+    readButton.id = 'read';
+    readButton.className = 'update-button';
+    let readIcon = document.createElement('i');
+    readIcon.className = 'ph ph-check';
+    readButton.appendChild(readIcon);
+
+    readWrapper.appendChild(readLabel);
+    readWrapper.appendChild(readButton);
+    updateButtons.appendChild(readWrapper);
+
+    let removeWrapper = document.createElement('div');
+    removeWrapper.className = 'button-wrapper';
+    let removeLabel = document.createElement('label');
+    removeLabel.setAttribute('for', 'delete');
+    removeLabel.textContent = "Remove?";
+    let removeButton = document.createElement('button');
+    removeButton.id = 'delete';
+    removeButton.className = 'update-button';
+    let removeIcon = document.createElement('i');
+    removeIcon.className = 'ph ph-x';
+    removeButton.appendChild(removeIcon);
+
+    removeWrapper.appendChild(removeLabel);
+    removeWrapper.appendChild(removeButton);
+    updateButtons.appendChild(removeWrapper);
+
+    spineBody.appendChild(updateButtons);
+
+    // Create ratings grid
+    let ratingDisplay = document.createElement('div');
+    ratingDisplay.className = 'rating';
+    let ratingText = document.createElement('p');
+    ratingText.textContent = "Rating:"
+    ratingDisplay.appendChild(ratingText);
+    let starIcon = document.createElement('i');
+    starIcon.className = 'ph-fill ph-star';
+    let ratingIcon = document.createElement('i');
+    ratingIcon.className = 'ph ph-star'
+
+    const ratingValue = parseInt(rating, 10);
+    for (let i = 0; i < ratingValue; i++) {
+        const filledStar = starIcon.cloneNode(true); 
+        ratingDisplay.appendChild(filledStar);
     }
+
+    const remainingStars = 5 - ratingValue;
+    for (let i = 0; i < remainingStars; i++) {
+        const emptyStar = ratingIcon.cloneNode(true); 
+        ratingDisplay.appendChild(emptyStar);
+    }
+
+    spineBody.appendChild(ratingDisplay);
+
+    // Create notes grid
+    let extraNotes = document.createElement('div');
+    extraNotes.className = 'extra-notes';
+    let notesLabel = document.createElement('label');
+    notesLabel.className = 'notes-label';
+    notesLabel.textContent = 'Additional notes:';
+    let notesTextarea = document.createElement('textarea');
+    notesTextarea.name = 'notes';
+    notesTextarea.id = 'notes';
+    notesTextarea.cols = '36';
+    notesTextarea.rows = '3';
+    extraNotes.appendChild(notesLabel);
+    extraNotes.appendChild(notesTextarea);
+    spineBody.appendChild(extraNotes);
+
+    notesTextarea.addEventListener('input', function() {
+        updateExtraNotes(myLibrary.length - 1, this.value);
+    });
+
+    spine.appendChild(spineBody);
 
     const targetShelf = getAvailableShelf();
     targetShelf.appendChild(spine);
-};
+}
+
+
+
+function updateExtraNotes(bookIndex, notes) {
+    if (bookIndex >= 0 && bookIndex < myLibrary.length) {
+        myLibrary[bookIndex].extraNotes = notes;
+        saveLibraryToLocalStorage();
+    }
+}
 
 // On the page being reloaded this will re-append books from the library to the page
 function addSpineForBook(book) {
+    // Get the values from the object keys
     const title = book.title;
-    const spine = document.createElement('div');
+    const author = book.author;
+    const read = book.read;
+    const rating = book.rating;
+    const extraNotes = book.extraNotes;
+
+    // Create spine
+    const spine = document.createElement('article');
     spine.className = 'spine';
-    const titleElement = document.createElement('p');
 
-    if (book.read === "you have not read this book") {
-        titleElement.style.color = "var(--clr-white)";
-    } else {
-        titleElement.style.color = "var(--clr-black)";
+    // Make visible spine header
+    const spineTitle = document.createElement('header');
+    spineTitle.className = 'spine-title';
+    const bookmarkIcon = document.createElement('i');
+    bookmarkIcon.className = 'ph ph-bookmark';
+    const titleText = document.createElement('p');
+    titleText.textContent = title;
+    if (read === "you have read this book") {
+        spineTitle.appendChild(bookmarkIcon);
     }
-    titleElement.innerText = title;
-    spine.appendChild(titleElement);
+    spineTitle.appendChild(titleText);
+    spine.appendChild(spineTitle);
 
-    if (book.read === "you have not read this book") {
-        spine.style.backgroundColor = "var(--clr-not-read)";
-    } else {
-        spine.style.backgroundColor = "var(--clr-read)";
+    // Make hidden spine body
+    const spineBody = document.createElement('div');
+    spineBody.className = 'spine-body';
+
+    // Create author gird 
+    let authorText = document.createElement('div');
+    authorText.textContent = "Author:";
+    let authorName = document.createElement('p');
+    authorName.textContent = `${author}`;
+    authorText.appendChild(authorName);
+    spineBody.appendChild(authorText);
+
+    // Create update buttons gird 
+    let updateButtons = document.createElement('div');
+    updateButtons.className = 'update-container';
+
+    let readWrapper = document.createElement('div');
+    readWrapper.className = 'button-wrapper';
+    let readLabel = document.createElement('label');
+    readLabel.setAttribute('for', 'read');
+    readLabel.textContent = "Read?";
+    let readButton = document.createElement('button');
+    readButton.id = 'read';
+    readButton.className = 'update-button';
+    let readIcon = document.createElement('i');
+    readIcon.className = 'ph ph-check';
+    readButton.appendChild(readIcon);
+
+    readWrapper.appendChild(readLabel);
+    readWrapper.appendChild(readButton);
+    updateButtons.appendChild(readWrapper);
+
+    let removeWrapper = document.createElement('div');
+    removeWrapper.className = 'button-wrapper';
+    let removeLabel = document.createElement('label');
+    removeLabel.setAttribute('for', 'delete');
+    removeLabel.textContent = "Remove?";
+    let removeButton = document.createElement('button');
+    removeButton.id = 'delete';
+    removeButton.className = 'update-button';
+    let removeIcon = document.createElement('i');
+    removeIcon.className = 'ph ph-x';
+    removeButton.appendChild(removeIcon);
+
+    removeWrapper.appendChild(removeLabel);
+    removeWrapper.appendChild(removeButton);
+    updateButtons.appendChild(removeWrapper);
+
+    spineBody.appendChild(updateButtons);
+
+    // Create ratings grid
+    const ratingDisplay = document.createElement('div');
+    ratingDisplay.className = 'rating';
+    const ratingText = document.createElement('p');
+    ratingText.textContent = 'Rating:';
+    ratingDisplay.appendChild(ratingText);
+
+    for (let i = 0; i < 5; i++) {
+        const starIcon = document.createElement('i');
+        starIcon.className = i < rating ? 'ph-fill ph-star' : 'ph ph-star';
+        ratingDisplay.appendChild(starIcon);
     }
+
+    spineBody.appendChild(ratingDisplay);
+
+    // Create notes grid
+    const extraNotesContainer = document.createElement('div');
+    extraNotesContainer.className = 'extra-notes';
+    const notesLabel = document.createElement('label');
+    notesLabel.className = 'notes-label';
+    notesLabel.textContent = 'Additional notes:';
+    const notesTextarea = document.createElement('textarea');
+    notesTextarea.name = 'notes';
+    notesTextarea.id = 'notes';
+    notesTextarea.cols = '36';
+    notesTextarea.rows = '3';
+    notesTextarea.value = extraNotes || '';
+    extraNotesContainer.appendChild(notesLabel);
+    extraNotesContainer.appendChild(notesTextarea);
+    spineBody.appendChild(extraNotesContainer);
+
+    spine.appendChild(spineBody);
 
     const targetShelf = getAvailableShelf();
     targetShelf.appendChild(spine);

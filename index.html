@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Odin Library</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto Slab">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
@@ -30,24 +29,33 @@
                     <label for="book-author">Book Author</label>
                     <input type="text" id="book-author" name="book-author" required>
                 </div>
-                <div class="form-field">
-                    <label for="pages">#Pages (optional)</label>
-                    <input type="number" id="pages" name="pages">
-                </div>
+
                 <div class="form-field">
                     <label for="read-validation">Have you read this book?</label>
                     <input type="checkbox" id="read-validation" name="read-validation">
+                </div>                
+                <div class="form-field">
+                    <label for="rating-input">Rating</label>
+                    <select name="rating-input" id="rating-input">
+                        <option value="0" selected disabled>-- Rating /5 --</option>
+                        <option value="1">1 star</option>
+                        <option value="2">2 stars</option>
+                        <option value="3">3 stars</option>
+                        <option value="4">4 stars</option>
+                        <option value="5">5 stars</option>
+                    </select>
+                </div>        
+                <div class="form-field">
+                    <button class="confirm-button" type="button" onclick="addBookToLibrary();addSpineToShelf();"> <!-- replace functions with -> onclick="validateAndClearForm()""-->
+                    Add Book
+                    </button>
                 </div>
             </div>
             <button class="swipe-button swipe-right" type="button" onclick="handleSwipeRight()">
                 <i class="ph-bold ph-caret-right"></i>
             </button>
         </div>
-        <div class="button-wrapper">
-            <button class="confirm-button" type="button" onclick="addBookToLibrary();addSpineToShelf();"> <!-- replace functions with -> onclick="validateAndClearForm()""-->
-                Add Book
-            </button>
-        </div>
+
         </form>
     </div>
 
@@ -89,23 +97,19 @@
 </div>
 
 
-
-
-
-
 <div class="top-book-shelf">
-    <div class="shelf-top"></div>
+
     <div class="shelf"></div>
     <div class="shelf"></div>
-    <div class="shelf-base"></div>
+
 </div>
 
 <div class="bottom-book-shelf">
-    <div class="shelf-top"></div>
+
     <div class="shelf"></div>
     <div class="shelf"></div>
     <div class="shelf"></div>
-    <div class="shelf-base"></div>
+
 </div>
 
 <script src="scripts.js"></script>

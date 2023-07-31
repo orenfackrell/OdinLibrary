@@ -1,15 +1,11 @@
 Library Ideas:
 
 spines:
-- "https://css-tricks.com/" style scrolling shelves check this vid = "https://www.youtube.com/watch?v=29deL9MFfWc"
 - ^this also make scrolling shelves
-- add star rating onto input field
-- have bookmark icon for read / not read "<i class="ph-bold ph-bookmark"></i>"
 - automatically sort the spines alphabetically 
 
 form card:
 - put cards into plus button like on "https://zakarya-mks.github.io/my-library/"
-- add star rating onto input field
 
 styling:
 - ask callum
