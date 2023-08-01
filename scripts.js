@@ -214,9 +214,7 @@ function addSpineForBook(book, spineId) {
     bookmarkIcon.className = 'ph ph-bookmark';
     const titleText = document.createElement('p');
     titleText.textContent = title;
-    if (read === "you have read this book") {
-        spineTitle.appendChild(bookmarkIcon);
-    }
+    if (read) {spineTitle.appendChild(bookmarkIcon);}
     spineTitle.appendChild(titleText);
     spine.appendChild(spineTitle);
 
