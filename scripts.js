@@ -94,7 +94,7 @@ function addSpineToShelf() {
     readLabel.textContent = "Read?";
     let readButton = document.createElement('button');
     readButton.id = 'read';
-    readButton.className = 'update-button';
+    readButton.classList.add( 'read-button', 'update-button');
     let readIcon = document.createElement('i');
     readIcon.className = 'ph ph-check';
     readButton.appendChild(readIcon);
@@ -173,26 +173,6 @@ function addSpineToShelf() {
     targetShelf.appendChild(spine);
 };
 
-function addEventListenersForExtraNotes() {
-    const spines = document.querySelectorAll('.spine');
-
-    spines.forEach((spine, index) => {
-        const textarea = spine.querySelector('textarea');
-        if (textarea) {
-            textarea.addEventListener('input', function() {
-                updateExtraNotes(index, this.value);
-            });
-        }
-    });
-};
-
-function updateExtraNotes(bookIndex, notes) {
-    if (bookIndex >= 0 && bookIndex < myLibrary.length) {
-        myLibrary[bookIndex].extraNotes = notes;
-        saveLibraryToLocalStorage();
-    }
-};
-
 // On the page being reloaded this will re-append books from the library to the page
 function addSpineForBook(book, spineId) {
     // Get the values from the object keys
@@ -241,7 +221,7 @@ function addSpineForBook(book, spineId) {
     readLabel.textContent = "Read?";
     let readButton = document.createElement('button');
     readButton.id = 'read';
-    readButton.className = 'update-button';
+    readButton.classList.add( 'read-button', 'update-button');
     let readIcon = document.createElement('i');
     readIcon.className = 'ph ph-check';
     readButton.appendChild(readIcon);
@@ -309,6 +289,93 @@ function addSpineForBook(book, spineId) {
     targetShelf.appendChild(spine);
 };
 
+/* -- Regarding updating book object from spine UI --*/
+
+function addEventListenersForReadStatus() {
+    const spines = document.querySelectorAll('.spine');
+
+    spines.forEach((spine) => {
+        const readButton = spine.querySelector('.read-button');
+        const bookIndex = spine.dataset.index; 
+
+        if (readButton) {
+            readButton.addEventListener('click', function() {
+                toggleReadForBook(bookIndex);
+            });
+        }
+    });
+};
+
+function toggleReadForBook(bookIndex) {
+    
+    if (bookIndex >= 0 && bookIndex < myLibrary.length) {
+        myLibrary[bookIndex].read = !myLibrary[bookIndex].read;
+
+
+        if (myLibrary[bookIndex].read) {
+            let newRating = prompt("Update your rating (0-5 stars):");
+
+            if (newRating !== null && !isNaN(newRating) && newRating >= 0 && newRating <= 5) {
+                myLibrary[bookIndex].rating = parseInt(newRating, 10);
+                
+                const spine = document.querySelector(`.spine[data-index="${bookIndex}"]`);
+                const ratingDisplay = spine.querySelector('.rating');
+
+                while (ratingDisplay.firstChild) {
+                    ratingDisplay.removeChild(ratingDisplay.firstChild);
+                }
+
+                const ratingText = document.createElement('p');
+                ratingText.textContent = 'Rating:';
+                ratingDisplay.appendChild(ratingText);
+                
+                for (let i = 0; i < 5; i++) {
+                    const starIcon = document.createElement('i');
+                    starIcon.className = i < newRating ? 'ph-fill ph-star' : 'ph ph-star';
+                    ratingDisplay.appendChild(starIcon);
+                }
+            }
+        }
+
+        const spine = document.querySelector(`.spine[data-index="${bookIndex}"]`);
+        const bookmarkIcon = spine.querySelector('.ph-bookmark');
+        if (myLibrary[bookIndex].read) {
+            if (!bookmarkIcon) {
+                const newBookmarkIcon = document.createElement('i');
+                newBookmarkIcon.className = 'ph ph-bookmark';
+                spine.querySelector('.spine-title').prepend(newBookmarkIcon);
+            }
+        } else {
+            if (bookmarkIcon) {
+                bookmarkIcon.remove();
+            }
+        }
+        
+        // Save the updated library to local storage
+        saveLibraryToLocalStorage();
+    }
+};
+
+function addEventListenersForExtraNotes() {
+    const spines = document.querySelectorAll('.spine');
+
+    spines.forEach((spine, index) => {
+        const textarea = spine.querySelector('textarea');
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                updateExtraNotes(index, this.value);
+            });
+        }
+    });
+};
+
+function updateExtraNotes(bookIndex, notes) {
+    if (bookIndex >= 0 && bookIndex < myLibrary.length) {
+        myLibrary[bookIndex].extraNotes = notes;
+        saveLibraryToLocalStorage();
+    }
+};
+
 /* -- Regarding local storage -- */
 
 function saveLibraryToLocalStorage() {
@@ -347,7 +414,11 @@ function clearMemory() {
     }
 };
 
-document.addEventListener('DOMContentLoaded', loadLibraryFromLocalStorage);
+document.addEventListener('DOMContentLoaded', function() {
+    loadLibraryFromLocalStorage();
+    addEventListenersForExtraNotes();
+    addEventListenersForReadStatus();
+});
 
 /* -- Regarding form validation -- */
 
