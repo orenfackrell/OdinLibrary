@@ -21,7 +21,6 @@ function addBookToLibrary() {
     
     
     const commitBook = new book(title, author, read, rating, extraNotes);
-    console.log(myLibrary);
     myLibrary.push(commitBook);
     saveLibraryToLocalStorage();
 };
@@ -206,7 +205,7 @@ function addSpineForBook(book, spineId) {
     // Create spine
     const spine = document.createElement('article');
     spine.className = 'spine';
-    spine.id = spineId;
+    spine.dataset.index = spineId;
 
     // Make visible spine header
     const spineTitle = document.createElement('header');
@@ -324,8 +323,8 @@ function loadLibraryFromLocalStorage() {
         try {
             myLibrary = JSON.parse(savedLibrary);
 
-            myLibrary.forEach(book => {
-                addSpineForBook(book);  // Assuming you have a function to add a spine for a book
+            myLibrary.forEach((book, index) => {
+                addSpineForBook(book, index);
             });
         } catch (error) {
             alert("There was an error loading your saved library. Data might be corrupted or in an unexpected format.");
