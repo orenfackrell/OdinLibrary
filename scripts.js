@@ -110,7 +110,7 @@ function addSpineToShelf() {
     removeLabel.textContent = "Remove?";
     let removeButton = document.createElement('button');
     removeButton.id = 'delete';
-    removeButton.className = 'update-button';
+    removeButton.classList.add( 'remove-button', 'update-button');
     let removeIcon = document.createElement('i');
     removeIcon.className = 'ph ph-x';
     removeButton.appendChild(removeIcon);
@@ -237,7 +237,7 @@ function addSpineForBook(book, spineId) {
     removeLabel.textContent = "Remove?";
     let removeButton = document.createElement('button');
     removeButton.id = 'delete';
-    removeButton.className = 'update-button';
+    removeButton.classList.add( 'remove-button', 'update-button');
     let removeIcon = document.createElement('i');
     removeIcon.className = 'ph ph-x';
     removeButton.appendChild(removeIcon);
@@ -356,6 +356,41 @@ function toggleReadForBook(bookIndex) {
     }
 };
 
+function addEventListenersForRemove() {
+    const spines = document.querySelectorAll('.spine');
+
+    spines.forEach((spine) => {
+        const removeButton = spine.querySelector('.remove-button');
+        const bookIndex = spine.dataset.index; 
+
+        if (removeButton) {
+            removeButton.addEventListener('click', function() {
+                removeBookAndSpine(bookIndex, spine);
+            });
+        }
+    });
+};
+
+function removeBookAndSpine(bookIndex, spine) {
+
+    const parsedBookIndex = parseInt(bookIndex, 10);
+
+    if (parsedBookIndex >= 0 && parsedBookIndex < myLibrary.length) {
+
+        myLibrary.splice(parsedBookIndex, 1);
+
+        spine.remove();
+
+        const subsequentSpines = document.querySelectorAll(`.spine[data-index="${bookIndex}"] ~ .spine`);
+        subsequentSpines.forEach(s => {
+            s.dataset.index = parseInt(s.dataset.index, 10) - 1;
+        });
+
+        saveLibraryToLocalStorage();
+    }
+}
+
+
 function addEventListenersForExtraNotes() {
     const spines = document.querySelectorAll('.spine');
 
@@ -418,6 +453,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadLibraryFromLocalStorage();
     addEventListenersForExtraNotes();
     addEventListenersForReadStatus();
+    addEventListenersForRemove();
 });
 
 /* -- Regarding form validation -- */
