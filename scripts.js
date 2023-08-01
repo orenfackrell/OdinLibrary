@@ -3,7 +3,8 @@
 let myLibrary = [];
 
 function book(title, author, read, rating, extraNotes) {
-    rating = rating || undefined
+    rating = rating || 0
+    extraNotes = extraNotes || ""
     this.title = title
     this.author = author
     this.read = read
@@ -16,9 +17,10 @@ function addBookToLibrary() {
     let author = document.getElementById('book-author').value
     let read = document.getElementById('read-validation').checked
     let rating = document.getElementById('rating-input').value;
+    let extraNotes = ""
     
     
-    const commitBook = new book(title, author, read, rating);
+    const commitBook = new book(title, author, read, rating, extraNotes);
     console.log(myLibrary);
     myLibrary.push(commitBook);
     saveLibraryToLocalStorage();
@@ -160,27 +162,40 @@ function addSpineToShelf() {
     extraNotes.appendChild(notesTextarea);
     spineBody.appendChild(extraNotes);
 
+    spine.dataset.index = myLibrary.length - 1; 
+
     notesTextarea.addEventListener('input', function() {
-        updateExtraNotes(myLibrary.length - 1, this.value);
+        updateExtraNotes(spine.dataset.index, this.value);
     });
 
     spine.appendChild(spineBody);
 
     const targetShelf = getAvailableShelf();
     targetShelf.appendChild(spine);
-}
+};
 
+function addEventListenersForExtraNotes() {
+    const spines = document.querySelectorAll('.spine');
 
+    spines.forEach((spine, index) => {
+        const textarea = spine.querySelector('textarea');
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                updateExtraNotes(index, this.value);
+            });
+        }
+    });
+};
 
 function updateExtraNotes(bookIndex, notes) {
     if (bookIndex >= 0 && bookIndex < myLibrary.length) {
         myLibrary[bookIndex].extraNotes = notes;
         saveLibraryToLocalStorage();
     }
-}
+};
 
 // On the page being reloaded this will re-append books from the library to the page
-function addSpineForBook(book) {
+function addSpineForBook(book, spineId) {
     // Get the values from the object keys
     const title = book.title;
     const author = book.author;
@@ -191,6 +206,7 @@ function addSpineForBook(book) {
     // Create spine
     const spine = document.createElement('article');
     spine.className = 'spine';
+    spine.id = spineId;
 
     // Make visible spine header
     const spineTitle = document.createElement('header');
@@ -270,13 +286,13 @@ function addSpineForBook(book) {
 
     spineBody.appendChild(ratingDisplay);
 
-    // Create notes grid
+    // Create notes grid  
     const extraNotesContainer = document.createElement('div');
     extraNotesContainer.className = 'extra-notes';
     const notesLabel = document.createElement('label');
     notesLabel.className = 'notes-label';
     notesLabel.textContent = 'Additional notes:';
-    const notesTextarea = document.createElement('textarea');
+    const notesTextarea = document.createElement('textarea');  
     notesTextarea.name = 'notes';
     notesTextarea.id = 'notes';
     notesTextarea.cols = '36';
@@ -285,12 +301,16 @@ function addSpineForBook(book) {
     extraNotesContainer.appendChild(notesLabel);
     extraNotesContainer.appendChild(notesTextarea);
     spineBody.appendChild(extraNotesContainer);
+    
+    notesTextarea.addEventListener('input', function() {
+        updateExtraNotes(spineId, this.value);
+    });
 
     spine.appendChild(spineBody);
 
     const targetShelf = getAvailableShelf();
     targetShelf.appendChild(spine);
-}
+};
 
 /* -- Regarding local storage -- */
 
@@ -377,7 +397,7 @@ const handleSwipeRight = () => {
     nextGroup.dataset.status = "active";
     activeIndex = nextIndex;
   });
-}
+};
 
 const handleSwipeLeft = () => {
   const nextIndex = activeIndex - 1 >= 0 ? activeIndex - 1 : groups.length - 1;
