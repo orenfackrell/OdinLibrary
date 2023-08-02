@@ -12,6 +12,8 @@ Global variables & page layout
     --clr-black: #050609;
     --clr-white: #fff;
     --clr-mahogany: #482029;
+    --img-green-bookcase: url("https://i.pinimg.com/564x/85/77/ce/8577ce28a559bde5368bf0b91d42c6ad.jpg");
+    --img-wood-texture: url("https://img.freepik.com/free-photo/dark-brown-wood-texture-background-with-design-space_53876-160408.jpg?w=740&t=st=1691007052~exp=1691007652~hmac=f17e10dcfc11b34098f99cbbc6161a1287b3260cbe53eb1941275a035cbe9ad8");
 }
 
 * {
@@ -25,12 +27,10 @@ p {
 
 body {
     margin: 0;
-    padding: 0 0.5rem;
     min-height: 100vh;
     display: grid;
     grid-template-columns: 300px repeat(3, 1fr);
     grid-template-rows: 380px 1fr;
-    background-color: var(--clr-read);
 }
 
 /*
@@ -38,43 +38,59 @@ Form card styling & layout
 */
 
 .card {
+    box-sizing: border-box;
+    width: 300px;
+    height: 380px;
+    padding: 24px;
+    background-image: var(--img-green-bookcase);
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-sizing: border-box;
     display: flex;
+    padding: 24px;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: space-around;
-    gap: 0.25rem;
-    padding: 0.5rem;
-    margin: 1rem;
-    border-radius: 0.8rem;
-    background-color: var(--clr-timberwolf);
-    border: 2px solid var(--clr-mahogany);
-    position: absolute;
-    height: 340px;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+    color: var(--clr-white);
 }
 
 h3 {
     margin: 0.1rem;
 }
 
-.card-body {
+.card-header {
     display: flex;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+    justify-content: space-between;
+}
+
+.card-header p {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%;
+    letter-spacing: -1.2px;
+}
+
+
+.card-body {
+    width: 252px;
+    height: 332px;
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
 }
 
 .form-field{
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    justify-content: space-around;
-    gap: 0.5rem;
-}
-
-.inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+    gap: 8px;
+    align-self: stretch;
 }
 
 input {
@@ -88,26 +104,59 @@ input {
     border: 1px solid var(--clr-onyx);
 }
 
+#read-validation {
+    display: flex;
+    width: 24px;
+    height: 24px;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;
+}
+
 .confirm-button {
-    padding: 0.5rem 1rem;
-    background-color: var(--clr-white);
-    border-radius: 15rem;   
+    width: 252px;
+    display: flex;
+    padding: 12px;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 8px;
+    align-self: stretch;
+    border-radius: 8px;
+    background:var(--clr-black);
+    color: #FFF;
+    text-align: center;
+    font-family: DM Mono;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 24px */
+    letter-spacing: -0.8px;
+}
+
+.swipe-btn-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
 }
 
 .swipe-button {
-    padding: 2rem 0rem;
-    background-color: var(--clr-white);
-    border: 1px solid var(--clr-onyx);
+    display: flex;
+    width: 34px;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: var(--clr-white);
 }
 
-.swipe-right {
-    border-radius: 0 10rem 10rem 0;
+#reset {
+    background: linear-gradient(0deg, rgba(255, 0, 0, 0.50) 0%, rgba(255, 0, 0, 0.50) 100%), #000;
 }
-
-.swipe-left {
-    border-radius: 10rem 0 0 10rem ;
-}
-
 /*
 Card formatting for animations
 */
@@ -170,7 +219,6 @@ Card formatting for animations
     grid-template-columns: repeat(auto-fill, 55px);
     grid-auto-flow: column;
     overflow-x: scroll;
-    margin: 0rem 0.5rem;
     background-color: var(--clr-timberwolf);
     border: 2px solid var(--clr-mahogany);
     gap: 0.2rem;

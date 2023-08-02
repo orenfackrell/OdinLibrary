@@ -9,65 +9,66 @@
 </head>
 <body>
 
-
-<div class="card-groups">
-
-    <div class="card" data-index="0" data-status="active">
-        <form class="form-card" action="#" method="post">
-            <h3>Add a new book to your Library</h3>
-    
+        <form action="#" method="post" class="card" data-index="0" data-status="active">
         <div class="card-body">
-            <button class="swipe-button swipe-left" type="button" onclick="handleSwipeLeft()">
-                <i class="ph-bold ph-caret-left"></i>
-            </button>
-            <div class="inputs">
-                <div class="form-field">
-                    <label for="book-title">Book Title</label>
-                    <input type="text" id="book-title" name="book-title" required>
-                </div>
-                <div class="form-field">
-                    <label for="book-author">Book Author</label>
-                    <input type="text" id="book-author" name="book-author" required>
-                </div>
-
-                <div class="form-field">
-                    <label for="read-validation">Have you read this book?</label>
-                    <input type="checkbox" id="read-validation" name="read-validation">
-                </div>                
-                <div class="form-field">
-                    <label for="rating-input">Rating</label>
-                    <select name="rating-input" id="rating-input">
-                        <option value="0" selected disabled>-- Rating /5 --</option>
-                        <option value="1">1 star</option>
-                        <option value="2">2 stars</option>
-                        <option value="3">3 stars</option>
-                        <option value="4">4 stars</option>
-                        <option value="5">5 stars</option>
-                    </select>
-                </div>        
-                <div class="form-field">
-                    <button class="confirm-button" type="button" onclick="addBookToLibrary();addSpineToShelf();"> <!-- replace functions with -> onclick="validateAndClearForm()""-->
-                    Add Book
+            <div class="card-header">
+                <p>Add Book</p>
+                <div class="swipe-btn-container">
+                    <button class="swipe-button swipe-left" type="button" onclick="handleSwipeLeft()">
+                        <i class="ph-bold ph-caret-left"></i>
+                        <button class="swipe-button swipe-right" type="button" onclick="handleSwipeRight()">
+                        <i class="ph-bold ph-caret-right"></i>
+                        </button>
                     </button>
                 </div>
             </div>
-            <button class="swipe-button swipe-right" type="button" onclick="handleSwipeRight()">
-                <i class="ph-bold ph-caret-right"></i>
-            </button>
+            <div class="form-field">
+                <label for="book-title">Title</label>
+                <input type="text" id="book-title" name="book-title" required>
+            </div>
+            <div class="form-field">
+                <label for="book-author">Author</label>
+                <input type="text" id="book-author" name="book-author" required>
+            </div>
+
+            <div class="form-field">
+                <label for="read-validation">Read?</label>
+                <input type="checkbox" id="read-validation" name="read-validation">
+            </div>                
+            <div class="form-field">
+                <label for="rating-input">Rating</label>
+                <select name="rating-input" id="rating-input">
+                    <option value="0" selected disabled>-- Rating /5 --</option>
+                    <option value="1">1 star</option>
+                    <option value="2">2 stars</option>
+                    <option value="3">3 stars</option>
+                    <option value="4">4 stars</option>
+                    <option value="5">5 stars</option>
+                </select>
+            </div>        
+            <div class="form-field">
+                <button class="confirm-button" type="button" onclick="addBookToLibrary();addSpineToShelf();"> <!-- replace functions with -> onclick="validateAndClearForm()""-->
+                Add Book
+                </button>
+            </div>
         </div>
-
         </form>
-    </div>
 
-    <div class="card" data-index="1" data-status="unknown">
-        <form class="form-card">
-            <h3>Adjust your library as you please</h3>
-    
-        <div class="card-body">
-            <button class="swipe-button swipe-left" type="button" onclick="handleSwipeLeft()">
-                <i class="ph-bold ph-caret-left"></i>
-            </button>
-            <div class="inputs">
+
+        <form class="card" data-index="1" data-status="unknown">
+           <div class="card-body">
+           <div class="card-header">
+                <p>Add Book</p>
+                <div class="swipe-btn-container">
+                    <button class="swipe-button swipe-left" type="button" onclick="handleSwipeLeft()">
+                        <i class="ph-bold ph-caret-left"></i>
+                        <button class="swipe-button swipe-right" type="button" onclick="handleSwipeRight()">
+                        <i class="ph-bold ph-caret-right"></i>
+                        </button>
+                    </button>
+            </div>
+            </div>
+            
                 <div class="form-field">
                     <label for="sorting">Sort by:</label>
                     <select name="sorting" id="sorting">
@@ -80,18 +81,12 @@
                     </select>
                 </div>
                 <div class="form-field">
-                    <label for="reset">Delete saved data?</label>
                     <button class="confirm-button" id="reset" type="button" onclick="clearMemory()">
-                        Reset Data
+                        Delete Saved Data?
                     </button>
                 </div>
+        </div>
 
-            </div>
-            <button class="swipe-button swipe-right" type="button" onclick="handleSwipeRight()">
-                <i class="ph-bold ph-caret-right"></i>
-            </button>
-        </div>
-        </div>
         </form>
     </div>
 </div>
