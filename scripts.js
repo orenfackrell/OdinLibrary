@@ -172,7 +172,9 @@ function addSpineToShelf() {
     const targetShelf = getAvailableShelf();
     targetShelf.appendChild(spine);
 
-    console.log(myLibrary)
+    addEventListenersForExtraNotes();
+    addEventListenersForReadStatus();
+    addEventListenersForRemove();
 };
 
 // On the page being reloaded this will re-append books from the library to the page
@@ -289,6 +291,10 @@ function addSpineForBook(book, spineId) {
 
     const targetShelf = getAvailableShelf();
     targetShelf.appendChild(spine);
+
+    addEventListenersForExtraNotes();
+    addEventListenersForReadStatus();
+    addEventListenersForRemove();
 };
 
 
