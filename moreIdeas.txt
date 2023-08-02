@@ -4,9 +4,6 @@ spines:
 - ^this also make scrolling shelves
 - automatically sort the spines alphabetically 
 
-form card:
-- put cards into plus button like on "https://zakarya-mks.github.io/my-library/"
-
 styling:
 - ask callum
 - fix ugly shelves

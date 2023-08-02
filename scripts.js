@@ -155,8 +155,8 @@ function addSpineToShelf() {
     let notesTextarea = document.createElement('textarea');
     notesTextarea.name = 'notes';
     notesTextarea.id = 'notes';
-    notesTextarea.cols = '36';
-    notesTextarea.rows = '3';
+    notesTextarea.cols = '37';
+    notesTextarea.rows = '2';
     extraNotes.appendChild(notesLabel);
     extraNotes.appendChild(notesTextarea);
     spineBody.appendChild(extraNotes);
@@ -171,6 +171,8 @@ function addSpineToShelf() {
 
     const targetShelf = getAvailableShelf();
     targetShelf.appendChild(spine);
+
+    console.log(myLibrary)
 };
 
 // On the page being reloaded this will re-append books from the library to the page
@@ -272,8 +274,8 @@ function addSpineForBook(book, spineId) {
     const notesTextarea = document.createElement('textarea');  
     notesTextarea.name = 'notes';
     notesTextarea.id = 'notes';
-    notesTextarea.cols = '36';
-    notesTextarea.rows = '3';
+    notesTextarea.cols = '37';
+    notesTextarea.rows = '2';
     notesTextarea.value = extraNotes || '';
     extraNotesContainer.appendChild(notesLabel);
     extraNotesContainer.appendChild(notesTextarea);
@@ -288,6 +290,41 @@ function addSpineForBook(book, spineId) {
     const targetShelf = getAvailableShelf();
     targetShelf.appendChild(spine);
 };
+
+
+/* -- Regarding library sorting -- */
+
+const sortOption = document.getElementById('sorting');
+
+sortOption.addEventListener('change', () => {
+    
+    if (sortOption.value == "titleA-Z"){
+        myLibrary.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortOption.value == "titleZ-A"){
+        myLibrary.sort((a, b) => b.title.localeCompare(a.title));
+    } else if (sortOption.value == "authorA-Z"){
+        myLibrary.sort((a, b) => a.author.localeCompare(b.author));
+    } else if (sortOption.value == "authorZ-A"){
+        myLibrary.sort((a, b) => b.author.localeCompare(a.author));
+    } else if (sortOption.value == "rating"){
+        myLibrary.sort((a, b) => b.rating - a.rating || a.title.localeCompare(b.title));  
+    }
+
+    const spines = document.querySelectorAll('.spine');
+    spines.forEach(spine => {
+        spine.remove();
+    });
+
+    myLibrary.forEach((book, index) => {
+        addSpineForBook(book, index);
+    });
+
+    addEventListenersForReadStatus();
+    addEventListenersForExtraNotes();
+    addEventListenersForRemove();
+
+    localStorage.setItem('sortPreference', sortOption.value);
+});
 
 /* -- Regarding updating book object from spine UI --*/
 
@@ -419,17 +456,53 @@ function saveLibraryToLocalStorage() {
 
 function loadLibraryFromLocalStorage() {
     const savedLibrary = localStorage.getItem('myLibrary');
+    const sortPreference = localStorage.getItem('sortPreference');  // Fetch the saved sort preference
+
     if (savedLibrary) {
         try {
-            myLibrary = JSON.parse(savedLibrary);
+            const parsedData = JSON.parse(savedLibrary);
+
+            // Additional validation to ensure parsedData is an array
+            if (!Array.isArray(parsedData)) {
+                throw new Error("Loaded data is not an array");
+            }
+
+            myLibrary = parsedData;
+
+            // Apply the sort based on the retrieved preference, if available
+            if (sortPreference) {
+                applySortPreference(sortPreference);
+            }
 
             myLibrary.forEach((book, index) => {
                 addSpineForBook(book, index);
             });
+
+            // Update the dropdown's selected option to reflect the saved preference
+            if (sortOption) {
+                sortOption.value = sortPreference;
+            }
+
         } catch (error) {
-            alert("There was an error loading your saved library. Data might be corrupted or in an unexpected format.");
+            alert(`There was an error loading your saved library. Details: ${error.message}`);
         }
-}};
+    }
+}
+
+function applySortPreference(preference) {
+    if (preference == "titleA-Z"){
+        myLibrary.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (preference == "titleZ-A"){
+        myLibrary.sort((a, b) => b.title.localeCompare(a.title));
+    } else if (preference == "authorA-Z"){
+        myLibrary.sort((a, b) => a.author.localeCompare(b.author));
+    } else if (preference == "authorZ-A"){
+        myLibrary.sort((a, b) => b.author.localeCompare(a.author));
+    } else if (preference == "rating"){
+        myLibrary.sort((a, b) => b.rating - a.rating || a.title.localeCompare(b.title));
+    }
+}
+
 
 function clearMemory() {
     const userConfirmed = confirm("Are you sure you want to reset all data? This action cannot be undone.");
